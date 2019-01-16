@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47BF07FB-7731-4CE8-832C-6D325289DA45}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SummerGUI.Charting</RootNamespace>
+    <AssemblyName>SummerGUI.Charting</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\SummerGUI\SummerGUI.snk</AssemblyOriginatorKeyFile>
+    <UseMSBuildEngine>False</UseMSBuildEngine>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Data" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Forms\Graph2D\DoubleConvert.cs" />
+    <Compile Include="Forms\Graph2D\GlobalEnums.cs" />
+    <Compile Include="Forms\Graph2D\GraphBase.cs" />
+    <Compile Include="Forms\Graph2D\GraphList.cs" />
+    <Compile Include="Forms\Graph2D\PlotArea.cs" />
+    <Compile Include="Forms\Graph2D\PlotterContainer.cs" />
+    <Compile Include="Forms\PerfChart\PerChartClasses.cs" />
+    <Compile Include="Forms\PerfChart\PerfChart.cs" />
+    <Compile Include="Forms\PerfChart\PerfChartStyle.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\KS.Foundation\KS.Foundation.csproj">
+      <Project>{F10BBD4E-1DD0-4A5B-B669-CA4F03EC6EC7}</Project>
+      <Name>KS.Foundation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SummerGUI\SummerGUI.csproj">
+      <Project>{27D216F7-4999-4D06-AF9F-2B51E09C885A}</Project>
+      <Name>SummerGUI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Theming\" />
+    <Folder Include="Forms\" />
+    <Folder Include="Forms\Graph2D\" />
+    <Folder Include="Forms\PerfChart\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE" />
+    <None Include="README" />
+  </ItemGroup>
+</Project>
