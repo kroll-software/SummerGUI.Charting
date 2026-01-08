@@ -8,6 +8,9 @@ using System.Drawing.Imaging;
 using System.Data;
 using System.Text;
 using System.Threading;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework; 
+
 using KS.Foundation;
 using SummerGUI.Charting.Graph2D;
 
@@ -158,8 +161,8 @@ namespace SummerGUI.Charting
 
 		public override void Initialize ()
 		{
-			base.Initialize ();
-			ParentWindow.ResourceManager.LoadCursorFromFile (ParentWindow, "Assets/Cursors/CrossHairs.png", "CrossHairs");
+			base.Initialize ();            
+			WindowResourceManager.Manager.LoadCursorFromFile ("Assets/Cursors/CrossHairs.png", "CrossHairs");
 		}
 
 		public override void OnMouseEnter (IGUIContext ctx)
@@ -182,7 +185,7 @@ namespace SummerGUI.Charting
 			: base(name, Docking.Fill, new Graph2DPlotterStyle())
         {                        
             // this.Cursor = Cursors.Cross;
-			Font = SummerGUIWindow.CurrentContext.FontManager.DefaultFont;
+			Font = FontManager.Manager.DefaultFont;
 
             m_CenterPoint.X = 0;
 			m_CenterPoint.Y = 0;
@@ -279,14 +282,14 @@ namespace SummerGUI.Charting
 			return new PointF((float)Point2ClientX(X, bounds), (float)Point2ClientY(Y, bounds));            
         }
 
-        // Point2Client Rückwärts
+        // Point2Client Rï¿½ckwï¿½rts
 		public double Client2PointX(double X, RectangleF bounds)
         {            
             double dx = PixelWidth(bounds);
 			return 0 + ((X - m_CenterPoint.X) * dx / ZoomX - bounds.Width / 2.0 * dx / ZoomX);
         }
 
-        // Point2Client Rückwärts
+        // Point2Client Rï¿½ckwï¿½rts
         public double Client2PointY(double Y, RectangleF bounds)
         {            
             double dy = PixelHeight(bounds) / AspectRatio(Bounds);
@@ -937,7 +940,7 @@ namespace SummerGUI.Charting
             }
 
             // Horizontale Linien
-            // Untere Hälfte            
+            // Untere Hï¿½lfte            
 
             iStart = ((int)(MaxY / stepY)) * stepY;
             iStart = Math.Min(iStart, 0);
@@ -960,7 +963,7 @@ namespace SummerGUI.Charting
 					ctx.DrawLine(AxisPen, pStep.X - tickLen, pStep.Y, pStep.X + tickLen, pStep.Y);
             }
 
-            // Obere Hälfte
+            // Obere Hï¿½lfte
 
             iStart = ((int)(MinY / stepY)) * stepY;
             iStart = Math.Max(iStart, 0);
@@ -1074,7 +1077,7 @@ namespace SummerGUI.Charting
         private bool bMouseDownFlag = false;
         private bool LastMouseDownWasItem = false;
 
-		public override void OnMouseDown (OpenTK.Input.MouseButtonEventArgs e)
+		public override void OnMouseDown (MouseButtonEventArgs e)
         {            
             base.OnMouseDown(e);
             bMouseDownFlag = true;
@@ -1090,13 +1093,13 @@ namespace SummerGUI.Charting
 
 
 			bool bControlPressed = ModifierKeys.ControlPressed;
-			if (PointCatched != null && (EditMode == PlotterEditModes.editErase || (e.Button == OpenTK.Input.MouseButton.Left && bControlPressed) || e.Button == OpenTK.Input.MouseButton.Right))
+			if (PointCatched != null && (EditMode == PlotterEditModes.editErase || (e.Button == MouseButton.Left && bControlPressed) || e.Button == MouseButton.Right))
             {
                 DeletePoint();                
                 return;
             }
 
-			if ((EditMode == PlotterEditModes.editPaint && e.Button == OpenTK.Input.MouseButton.Left) || bControlPressed)
+			if ((EditMode == PlotterEditModes.editPaint && e.Button == MouseButton.Left) || bControlPressed)
             {
                 AddPoint(e.X, e.Y);
                 LastMouseDownWasItem = true;
@@ -1123,9 +1126,9 @@ namespace SummerGUI.Charting
 			UpdateCursor ();
         }
         
-		public override void OnDoubleClick (OpenTK.Input.MouseButtonEventArgs e)
+		public override void OnDoubleClick (MouseButtonEventArgs e)
 		{
-			if (e.Button != OpenTK.Input.MouseButton.Left)
+			if (e.Button != MouseButton.Left)
 				return;
 
 			if (PointCatched != null)
@@ -1150,7 +1153,7 @@ namespace SummerGUI.Charting
 			}
 		}
 
-		public override void OnMouseUp (OpenTK.Input.MouseButtonEventArgs e)
+		public override void OnMouseUp (MouseButtonEventArgs e)
         {            
             base.OnMouseUp(e);
             bMouseMoving = false;
@@ -1158,7 +1161,7 @@ namespace SummerGUI.Charting
             //this.Cursor = Cursors.Cross;
         }
 			
-		public override void OnMouseMove (OpenTK.Input.MouseMoveEventArgs e)
+		public override void OnMouseMove (MouseMoveEventArgs e)
         {
             base.OnMouseMove(e);            
 
@@ -1230,13 +1233,13 @@ namespace SummerGUI.Charting
                 Invalidate();
         }
 
-		public override bool OnMouseWheel (OpenTK.Input.MouseWheelEventArgs e)
+		public override bool OnMouseWheel (MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
 
-            if (e.Delta > 0)
+            if (e.OffsetY > 0)
                 ZoomIn();
-			else if (e.Delta < 0)
+			else if (e.OffsetY < 0)
                 ZoomOut();
 
 			return true;

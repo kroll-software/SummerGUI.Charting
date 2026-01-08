@@ -7,7 +7,7 @@ namespace SummerGUI.Charting.Graph2D
 {
     [Serializable]
     [TypeConverter(typeof(ExpandableObjectConverter))]    
-    public class GraphList : Dictionary<String, GraphBase>
+    public class GraphList : Dictionary<string, GraphBase>
     {
         public GraphList()            
         {

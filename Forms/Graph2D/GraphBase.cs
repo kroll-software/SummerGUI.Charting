@@ -63,7 +63,8 @@ namespace SummerGUI.Charting.Graph2D
 
 		public void Clear()
 		{
-		}
+            Points.Clear();
+        }
 
 		public void Remove(int row)  
 		{
@@ -73,7 +74,7 @@ namespace SummerGUI.Charting.Graph2D
 		public void InitializeColumns ()
 		{
 			ColumnManager.Columns.Add (new DataGridColumn {
-				Text = "X",
+				Text = "Y",
 				Width = 0.5f,
 				MinWidth = 60,
 				AutoMinWidth = true,
@@ -82,7 +83,7 @@ namespace SummerGUI.Charting.Graph2D
 			});
 
 			ColumnManager.Columns.Add (new DataGridColumn {
-				Text = "Y",
+				Text = "X",
 				Width = 0.5f,
 				MinWidth = 60,
 				AutoMinWidth = true,
@@ -101,7 +102,7 @@ namespace SummerGUI.Charting.Graph2D
 
 		public string GetValue (int row, int col)
 		{
-			if (row > Points.Count)
+			if (row >= Points.Count)
 				return String.Empty;
 
 			if (col == 0)
@@ -141,6 +142,7 @@ namespace SummerGUI.Charting.Graph2D
 		{
 			int index = Points.IndexOf (point);
 			if (index >= 0 && index < Points.Count) {
+                SelectionManager.SelectNone();                
 				RowManager.CurrentRowIndex = index;
 				RowManager.EnsureRowindexVisible (index);
 			}

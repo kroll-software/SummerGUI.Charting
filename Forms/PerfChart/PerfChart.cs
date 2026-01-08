@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL;
 using KS.Foundation;
 using SummerGUI.Charting.PerfCharts;
@@ -74,7 +75,16 @@ namespace SummerGUI.Charting
 			ValueSpacing = GridSpacing / 4;
 
 			try {
-				MAX_VALUE_COUNT = (OpenTK.DisplayDevice.Default.Bounds.Width / ValueSpacing).Ceil();	
+				// 1. Primären Monitor abrufen
+				MonitorInfo primaryMonitor = Monitors.GetPrimaryMonitor();
+
+				// 2. Den aktuellen VideoMode des Monitors abrufen
+				var videoMode = primaryMonitor.CurrentVideoMode;
+
+				// 3. Die Breite aus den Bounds (oder dem Size-Feld) des VideoModes auslesen
+				int screenWidth = videoMode.Width; // oder videoMode.Bounds.Size.X
+
+				MAX_VALUE_COUNT = (screenWidth / ValueSpacing).Ceil();	
 			} catch (Exception ex) {
 				ex.LogError ();
 				MAX_VALUE_COUNT = 240;
@@ -83,7 +93,7 @@ namespace SummerGUI.Charting
             // Initialize Variables
             ChartStyle = new PerfChartStyle();
 			        
-			this.Font = SummerGUIWindow.CurrentContext.FontManager.CaptionFont;
+			this.Font = FontManager.Manager.CaptionFont;
 			Caption = name.FormatForDisplay();
 
 			ScaleMode = ScaleModes.Absolute;
