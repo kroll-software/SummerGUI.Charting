@@ -393,35 +393,35 @@ namespace SummerGUI.Charting
 
 			PointF currentPoint = new Point();
 
-			using (new PaintWrapper (RenderingFlags.HighQuality)) {
-				GL.Color4 (LineColor);
-				GL.LineWidth (LineWidth);
-				GL.Begin (PrimitiveType.Lines);
-
+			// Wir brauchen keinen PaintWrapper oder GL.Begin mehr.
+			// Der Context (ctx) verwaltet Farbe und Linienstärke über den Pen.
+			using (Pen linePen = new Pen(LineColor, LineWidth)) 
+			{
 				LinkedListNode<decimal> node = drawValues.First;
 
-				for (int i = 0; i < visibleValues; i++) {
-
-					if (node == null)	// that's true, it always happens. Wher have I got a loop ?
+				for (int i = 0; i < visibleValues; i++) 
+				{
+					if (node == null) 
 						break;
 
+					// 1. Neue Position berechnen
 					currentPoint.X = previousPoint.X + deltaX;
-					currentPoint.Y = (float)(CalcVerticalPosition (node.Value) + offsetY);
+					currentPoint.Y = (float)(CalcVerticalPosition(node.Value) + offsetY);
 
-					GL.Vertex2 (currentPoint.X, currentPoint.Y);
-					GL.Vertex2 (previousPoint.X, previousPoint.Y);
+					// 2. Zeichnen via SummerGUI Batch-Funktion
+					// Das ersetzt GL.Vertex2(...) + GL.Vertex2(...)
+					ctx.DrawLine(linePen, previousPoint.X, previousPoint.Y, currentPoint.X, currentPoint.Y);
 
+					// 3. Status für das nächste Segment aktualisieren
 					previousPoint = currentPoint;
 					node = node.Next;
 				}
-
-				GL.End ();
 			}
 
             // Draw current relative maximum value string
             if (ScaleMode == ScaleModes.Relative) {
                 SolidBrush sb = new SolidBrush(ChartStyle.ChartLinePen.Color);
-				ctx.DrawString(CurrentMaxValue.ToString(), this.Font, sb, new PointF(4.0f, 2.0f), 
+				ctx.DrawString(CurrentMaxValue.ToString(), this.Font, sb, new RectangleF(4.0f, 2.0f, 0, 0), 
 					FontFormat.DefaultSingleLine);
             }
 
@@ -480,42 +480,31 @@ namespace SummerGUI.Charting
 				bounds.Height -= captionHeight;
 			}
 
-			// Draw the background Gradient rectangle
-			ctx.FillRectangle(ChartStyle.GradientBrush, bounds);
-
-			// Grid-lines should be optimizd by GL.CallList or a Vertex-Buffer
-
 			// Draw all visible, vertical gridlines (if wanted)
-			if (ChartStyle.ShowVerticalGridLines) {				
-				using (new PaintWrapper (RenderingFlags.HighQuality)) {					
-					GL.LineWidth (ChartStyle.VerticalGridPen.Pen.Width);
-					GL.Color4 (ChartStyle.VerticalGridPen.Pen.Color);
-					GL.Begin (PrimitiveType.Lines);
+			if (ChartStyle.ShowVerticalGridLines) 
+			{
+				float i = bounds.Right + gridScrollOffset;
+				Pen vPen = ChartStyle.VerticalGridPen.Pen;
 
-					float i = bounds.Right + gridScrollOffset;
-					while (i > bounds.Left) {
-						GL.Vertex2 (i, bounds.Bottom);
-						GL.Vertex2 (i, bounds.Top);
-						i -= GridSpacing;
-					}						
-
-					GL.End ();
-				}
+				while (i > bounds.Left) 
+				{
+					// Wir zeichnen nur, wenn die Linie innerhalb der horizontalen Bounds liegt
+					if (i <= bounds.Right)
+					{
+						ctx.DrawLine(vPen, i, bounds.Bottom, i, bounds.Top);
+					}
+					i -= GridSpacing;
+				}                       
 			}
 
 			// Draw all visible, horizontal gridlines (if wanted)
-			if (ChartStyle.ShowHorizontalGridLines) {
-				using (new PaintWrapper (RenderingFlags.HighQuality)) {
-					GL.Color4 (ChartStyle.HorizontalGridPen.Pen.Color);
-					GL.LineWidth (ChartStyle.HorizontalGridPen.Pen.Width);
-					GL.Begin (PrimitiveType.Lines);
-
-					for (int i = bounds.Bottom.Ceil(); i >= bounds.Top; i -= GridSpacing) {
-						GL.Vertex2 (bounds.Right, i + 0.5f);
-						GL.Vertex2 (bounds.Left, i + 0.5f);
-					}
-
-					GL.End ();
+			if (ChartStyle.ShowHorizontalGridLines) 
+			{
+				Pen hPen = ChartStyle.HorizontalGridPen.Pen;
+				
+				for (float i = MathF.Ceiling(bounds.Bottom); i >= bounds.Top; i -= GridSpacing) 
+				{					
+					ctx.DrawLine(hPen, bounds.Right, i + 0.5f, bounds.Left, i);
 				}
 			}
 		}

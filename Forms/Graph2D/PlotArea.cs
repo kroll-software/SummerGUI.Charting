@@ -124,8 +124,8 @@ namespace SummerGUI.Charting
         // MouseMoving        
         private bool bMouseMoving = false;
         private bool bMouseHover = false;
-        private int MoveStartX;
-        private int MoveStartY;
+        private float MoveStartX;
+        private float MoveStartY;
 		private PointF MoveStartCenterPoint = new PointF();
 		private PointF CurrentMousePosition = new PointF();
 
@@ -1005,7 +1005,7 @@ namespace SummerGUI.Charting
             for (double i = iStart - stepX; i >= MinX; i -= stepX)
             {
 				pStep = Point2Client(i, 0, Bounds).Add(offsetX, offsetY);
-				ctx.DrawString(FormatLabel(i, 0), Font, TextBrush, pStep.X, pStep.Y - (fontHeight * 2f), CenterFontFormat);
+				ctx.DrawString(FormatLabel(i, 0), Font, TextBrush, pStep.X, pStep.Y - (fontHeight * 2f), CenterFontFormat);                
             }
 
             // Rechts
