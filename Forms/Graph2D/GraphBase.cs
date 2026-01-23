@@ -116,7 +116,7 @@ namespace SummerGUI.Charting.Graph2D
 			return 0;
 		}
 
-		public void ApplySort ()
+		public async Task ApplySort ()
 		{			
 		}			
 
