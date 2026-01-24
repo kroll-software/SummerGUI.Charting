@@ -100,7 +100,7 @@ namespace SummerGUI.Charting.Graph2D
 			RowManager.MoveFirst ();
 		}
 
-		public string GetValue (int row, int col)
+		public object GetValue (int row, int col)
 		{
 			if (row >= Points.Count)
 				return String.Empty;
@@ -111,12 +111,17 @@ namespace SummerGUI.Charting.Graph2D
 				return Points [row].Y.ToString ("n9").StripTrailingZeros();
 		}
 
+        public string GetFormattedValue(int row, int col)
+        {
+            return (string)GetValue(row, col);
+        }
+
 		public int GroupLevel (int row)
 		{
 			return 0;
 		}
 
-		public async Task ApplySort ()
+		public void ApplySort ()
 		{			
 		}			
 
