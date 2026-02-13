@@ -74,6 +74,7 @@ namespace SummerGUI.Charting.Graph2D
 		public void InitializeColumns ()
 		{
 			ColumnManager.Columns.Add (new DataGridColumn {
+                Key = "Y",
 				Text = "Y",
 				Width = 0.5f,
 				MinWidth = 60,
@@ -83,6 +84,7 @@ namespace SummerGUI.Charting.Graph2D
 			});
 
 			ColumnManager.Columns.Add (new DataGridColumn {
+                Key = "X",
 				Text = "X",
 				Width = 0.5f,
 				MinWidth = 60,
@@ -100,20 +102,20 @@ namespace SummerGUI.Charting.Graph2D
 			RowManager.MoveFirst ();
 		}
 
-		public object GetValue (int row, int col)
+		public object GetValue (int row, string key)
 		{
 			if (row >= Points.Count)
 				return String.Empty;
 
-			if (col == 0)
+			if (key == "X")
 				return Points [row].X.ToString ("n9").StripTrailingZeros();
 			else
 				return Points [row].Y.ToString ("n9").StripTrailingZeros();
 		}
 
-        public string GetFormattedValue(int row, int col)
+        public string GetFormattedValue(int row, string key)
         {
-            return (string)GetValue(row, col);
+            return (string)GetValue(row, key);
         }
 
 		public int GroupLevel (int row)
