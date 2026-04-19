@@ -159,9 +159,9 @@ namespace SummerGUI.Charting
 				ParentWindow.SetCustomCursor ("CrossHairs");
 		}
 
-		public override void Initialize ()
+		public override void Initialize (IGUIContext ctx)
 		{
-			base.Initialize ();            
+			base.Initialize (ctx);
 			WindowResourceManager.Manager.LoadCursorFromFile ("Assets/Cursors/CrossHairs.png", "CrossHairs");
 		}
 

@@ -61,9 +61,9 @@ namespace SummerGUI.Charting
 			}
 		}			
 
-		public override void OnResize ()
+		public override void OnResize (IGUIContext ctx)
 		{
-			base.OnResize ();
+			base.OnResize (ctx);
 			MAX_VALUE_COUNT = (Width / ValueSpacing + 2f).Ceil();
 		}
         
